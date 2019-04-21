@@ -2,7 +2,8 @@ $(function () {
   var socket = io();
 
   $('form').submit(function(e) {
-    e.preventDefault(); // prevents page reoloading
+    e.preventDefault(); // prevents page reloading
+    $('#messages').append($('<li>').text($('#m').val()));
     socket.emit('chat message', $('#m').val());
     $('#m').val('');
     return false;
