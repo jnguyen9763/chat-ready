@@ -3,21 +3,28 @@ $(function () {
 
   $('form').submit(function(e) {
     e.preventDefault(); // prevents page reloading
-    $('#messages').append($('<li>').text($('#m').val()));
+    $('#messages').append($('<li>').text('You: ' + $('#m').val()));
     socket.emit('chat message', $('#m').val());
     $('#m').val('');
     return false;
   });
 
-  socket.on('user connected', function() {
-    $('#messages').append($('<li>').text('~ a user has joined ~'));
+  socket.on('nickname', function() {
+    var nickname = prompt('Please enter your nickname');
+    if (nickname != null) {
+      socket.emit('user connected', nickname);
+    }
   });
 
-  socket.on('chat message', function(msg) {
-    $('#messages').append($('<li>').text(msg));
+  socket.on('user connected', function(nickname) {
+    $('#messages').append($('<li>').text('~ ' + nickname + ' has joined ~'));
   });
 
-  socket.on('user disconnected', function() {
-    $('#messages').append($('<li>').text('~ a user has left ~'));
+  socket.on('chat message', function(user, msg) {
+    $('#messages').append($('<li>').text(user + ': ' + msg));
+  });
+
+  socket.on('user disconnected', function(nickname) {
+    $('#messages').append($('<li>').text('~ ' + nickname + ' has left ~'));
   });
 });
