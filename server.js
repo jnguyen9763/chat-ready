@@ -27,6 +27,14 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     socket.broadcast.emit('user disconnected', users[socket.id]);
   });
+
+  socket.on('is typing', function() {
+    socket.broadcast.emit('is typing', users[socket.id]);
+  });
+
+  socket.on('stop typing', function() {
+    socket.broadcast.emit('stop typing', users[socket.id]);
+  });
 });
 
 http.listen(PORT, function() {
